@@ -1,14 +1,16 @@
-'use strict';
+"use strict";
 
-const assert = require('assert');
-require('babel-register');
-const StreamReader = require('../lib/stream-reader').default;
-const eat = require('../lib/quotes').eatQuoted;
+const assert = require("assert");
+require("babel-register");
+global.babelHelpers =
+	global.babelHelpers || require("babel-plugin-external-helpers");
+const StreamReader = require("../lib/stream-reader").default;
+const eat = require("../lib/quotes").eatQuoted;
 
-describe('Quotes', () => {
+describe("Quotes", () => {
 	const stream = str => new StreamReader(str);
 
-	it('eat quoted string backwards', () => {
+	it("eat quoted string backwards", () => {
 		let s = stream(' "foo"');
 		assert(eat(s));
 		assert.equal(s.pos, 1);
@@ -21,12 +23,12 @@ describe('Quotes', () => {
 		assert(eat(s));
 		assert.equal(s.pos, 0);
 
-		s = stream('"a\\\"b"');
+		s = stream('"a\\"b"');
 		assert(eat(s));
 		assert.equal(s.pos, 0);
 
 		// don’t eat anything
-		s = stream('foo');
+		s = stream("foo");
 		assert(!eat(s));
 		assert.equal(s.pos, 3);
 	});
